@@ -1,21 +1,21 @@
 import streamlit as st
 import pandas as pd
 
-text = "Écrivez un court paragraphe sur votre personnalité célèbre préférée. Dites-nous pourquoi vous l'admirez et quelles sont les choses que vous aimez ou n'aimez pas qu'elle fait"
 # read csv
 df = pd.read_csv('content/question_demo_bsf.csv')
 text = df['question'][0]
 
 
 # logo
-st.image("content/logo_pleais.png", width=150)
+st.image("content/Logo_Karibu.png", width=150)
 
 # exercise title
 st.markdown("""
-    <div style="background-color: #F44A9D; padding: 8px; text-align: left;">
+    <div style="background-color: #F44A9D; padding: 4px; text-align: left;">
         <p style="color: white; font-family: 'Helvetica';">✍️ EXPRESSION ÉCRITE</p>
     </div>
     """, unsafe_allow_html=True)
+
 
 # Prompt
 st.write("À vous de jouer ! " + text)
