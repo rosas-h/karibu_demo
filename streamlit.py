@@ -29,7 +29,7 @@ intermediate = df[df['level'] == 'intermediate']['question'].tolist()
 advanced = df[df['level'] == 'advanced']['question'].tolist()
 
 # model to predict the level of the input text
-classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
+# classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
 
 text = beginner[0]
 
