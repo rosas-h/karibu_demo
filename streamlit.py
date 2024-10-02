@@ -29,7 +29,7 @@ intermediate = df[df['level'] == 'intermediate']['question'].tolist()
 advanced = df[df['level'] == 'advanced']['question'].tolist()
 
 # model to predict the level of the input text
-# classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
+classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
 
 text = beginner[0]
 
@@ -77,8 +77,8 @@ if st.button('Valider', type="primary"):
             st.write(correct_text(text_input, token))
 
         # get the level of the input text
-        # res = classifier(text_input)
-        # st.write('level of your text is ', res[0]['label'])
+        res = classifier(text_input)
+        st.write('level of your text is ', res[0]['label'])
 
     # st.html("""
     #     <div style="background-color: #CACACA; padding: 8px; border-radius: 8px; display: flex; align-items: left;">
