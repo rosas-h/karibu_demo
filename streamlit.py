@@ -4,6 +4,8 @@ import base64
 from transformers import pipeline
 from ai_tutor import correct_text
 
+token = st.secrets["hf_token"]
+
 correction_text = """
 **Vocabulaire :**
 Le vocabulaire utilisé est simple mais efficace. Le choix des mots est approprié pour décrire les qualités de Beyoncé. Cependant, il y a quelques mots qui pourraient être remplacés pour ajouter de la variété. Par exemple, au lieu de "très bien", vous pourriez utiliser "exceptionnellement" ou "avec talent". De plus, "incroyable" est un adjectif qui est souvent utilisé, vous pourriez essayer "époustouflant" ou "mémorable" pour ajouter de la diversité.
@@ -72,7 +74,7 @@ if st.button('Valider', type="primary"):
         with st.spinner('Wait for it...'):
     # time.sleep(5)
         # get correction from the model
-            st.write(correct_text(text_input))
+            st.write(correct_text(text_input, token))
 
         # get the level of the input text
         res = classifier(text_input)
