@@ -1,26 +1,11 @@
 import streamlit as st
 import pandas as pd
 import base64
+import random
 from transformers import pipeline
 from ai_tutor import correct_text
 
 token = st.secrets["hf_token"]
-
-correction_text = """
-**Vocabulaire :**
-Le vocabulaire utilisé est simple mais efficace. Le choix des mots est approprié pour décrire les qualités de Beyoncé. Cependant, il y a quelques mots qui pourraient être remplacés pour ajouter de la variété. Par exemple, au lieu de "très bien", vous pourriez utiliser "exceptionnellement" ou "avec talent". De plus, "incroyable" est un adjectif qui est souvent utilisé, vous pourriez essayer "époustouflant" ou "mémorable" pour ajouter de la diversité.
-
-**Grammaire :**
-- "Ma star préférée est Beyoncé." → "Ma star préférée est Beyoncé." (aucune erreur)
-- "Elle chante très bien et ses concerts sont incroyable." → "Elle chante très bien et ses concerts sont incroyables." (accord du pluriel)
-- "J'aime qu'elle parle de sujets importants comme l'égalité." → "J'aime qu'elle parle de sujets importants, comme l'égalité." (virgule de séparation)
-- "Mais je trouve que certaines de ses chansons sont trop répétitifs." → "Mais je trouve que certaines de ses chansons sont trop répétitives." (accord du féminin)
-
-**Appréciation générale :**
-Votre texte est clair et facile à comprendre. Vous avez réussi à exprimer vos opinions sur Beyoncé de manière concise. N'oubliez pas de varier votre vocabulaire et de vérifier l'accord grammatical pour améliorer votre écriture. Continuez à écrire et à vous exprimer avec confiance!
-
-"""
-
 
 # read csv and get questions by level
 df = pd.read_csv('content/question_demo_bsf.csv')
@@ -31,13 +16,23 @@ advanced = df[df['level'] == 'advanced']['question'].tolist()
 # model to predict the level of the input text
 classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
 
-text = beginner[0]
+# initialize the session state
+if 'count' not in st.session_state:
+    st.session_state.count = 0
+
+if 'text' not in st.session_state:
+    st.session_state.text = random.choice(beginner)
+
+if 'user_input' not in st.session_state:
+    st.session_state.user_input = ""
+
 
 # put image and buttin in the center
 st.markdown("<style>div.stButton {display: flex; justify-content: center;}</style>", unsafe_allow_html=True)
 st.markdown("<style>div.stImage {display: flex; justify-content: center;}</style>", unsafe_allow_html=True)
 
 logo_path = "content/Logo_Karibu.png"
+logo_pleias = "content/logo_pleias.png"
 icon_path = "content/icon_ecrit.svg"
 
 def green_header(text):
@@ -52,24 +47,31 @@ def green_header(text):
 st.image(logo_path)
 
 # block with icon and exercice type
-file_ = open(icon_path, "rb")
-contents = file_.read()
-data_url = base64.b64encode(contents).decode("utf-8")
-file_.close()
+def get_image(icon_path):
+    file_ = open(icon_path, "rb")
+    contents = file_.read()
+    data_url = base64.b64encode(contents).decode("utf-8")
+    file_.close()
+    return data_url
+# file_ = open(icon_path, "rb")
+# contents = file_.read()
+# data_url = base64.b64encode(contents).decode("utf-8")
+# file_.close()
 
 st.html(f"""
     <div style="background: linear-gradient(90deg, #E23337, #E41AAC); padding: 6px; border-radius: 8px; display: flex; align-items: left;">
-        <img src="data:image/svg+xml;base64,{data_url}">
+        <img src="data:image/svg+xml;base64,{get_image(icon_path)}">
         <p style="color: white; margin: 8px;">EXPRESSION ÉCRITE</p>
     </div>
 """)
 
 
 # Exercice description
-st.write("\nÀ vous de jouer ! " + text)
+st.write("\n")
+st.write("À vous de jouer ! " + st.session_state.text)
 
 # Input field
-text_input = st.text_area("Écrivez ici, au moins 30 mots...", height=200)
+text_input = st.text_area("Ecrivez un texte d'au moins 30 mots", label_visibility="collapsed", height=200, placeholder="Ecrivez un texte d'au moins 30 mots", value=st.session_state.user_input)
 
 # Button
 if st.button('Valider', type="primary"):
@@ -83,15 +85,37 @@ if st.button('Valider', type="primary"):
         # get correction from the model
             st.write(correct_text(text_input, token))
 
-        # get the level of the input text
-        res = classifier(text_input)
+        # Classifier and recomendation
         green_header('Recomendation')
-        st.write("\n\nNous avons sélectionné d'autres exercices basés sur votre travail pour corriger vos erreurs et améliorer votre français")
-        st.write('\nexersice for level:', res[0]['label'])
 
-    # st.html("""
-    #     <div style="background-color: #CACACA; padding: 8px; border-radius: 8px; display: flex; align-items: left;">
-    #         <p>your text</p>
-    #     </div>
-    # """)
-    # print(classifier(text_input))
+        # predict the level of the input text
+        res = classifier(text_input)[0]['label']
+
+        # get random question based on the level
+        if res == 'advanced':
+            st.session_state.text = random.choice(advanced)
+        elif res == 'intermediate':
+            st.session_state.text = random.choice(intermediate)
+        else:
+            st.session_state.text = random.choice(beginner)
+        st.write("Voici une nouvelle activité spécialement choisie pour vous, afin de corriger vos erreurs et perfectionner votre français.")
+        if st.button("Commencer l'exercice suivant", type="primary"):
+            st.session_state.count += 1
+            st.session_state.user_input = ""
+            st.experimental_rerun()
+st.session_state.user_input = text_input
+
+# st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+# st.image(logo_pleias, width=150)
+
+# st.markdown("""
+#     <div style='margin-top: 40px;'>
+#         <img src='image.png' style='width: 150px; height: auto;'/>
+#     </div>
+# """, unsafe_allow_html=True)
+
+st.html(f"""
+    <div style='margin-top: 40px;'>       
+        <img src="data:image/png+xml;base64,{get_image(logo_pleias)}">
+    </div>
+""")
