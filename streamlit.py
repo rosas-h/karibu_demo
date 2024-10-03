@@ -40,6 +40,12 @@ st.markdown("<style>div.stImage {display: flex; justify-content: center;}</style
 logo_path = "content/Logo_Karibu.png"
 icon_path = "content/icon_ecrit.svg"
 
+def green_header(text):
+    st.markdown(
+        f"""
+        <h2 style='color: #4ABC96;'>{text}</h1>
+        """, unsafe_allow_html=True
+    )
 
 
 # logo
@@ -70,15 +76,18 @@ if st.button('Valider', type="primary"):
     if len(text_input) < 30:
         st.warning("Le texte doit contenir au moins 30 mots.")
     else:
-        st.subheader("Correction")
-        with st.spinner('Wait for it...'):
-    # time.sleep(5)
+        # st.subheader('**:green[Correction]**')
+        green_header('Correction')
+        
+        with st.spinner('Correction en cours, veuillez patienter...'):
         # get correction from the model
             st.write(correct_text(text_input, token))
 
         # get the level of the input text
         res = classifier(text_input)
-        st.write('level of your text is ', res[0]['label'])
+        green_header('Recomendation')
+        st.write("\n\nNous avons sélectionné d'autres exercices basés sur votre travail pour corriger vos erreurs et améliorer votre français")
+        st.write('\nexersice for level:', res[0]['label'])
 
     # st.html("""
     #     <div style="background-color: #CACACA; padding: 8px; border-radius: 8px; display: flex; align-items: left;">

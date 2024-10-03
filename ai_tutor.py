@@ -16,6 +16,8 @@ def make_prompt(text):
     3. **Appréciation générale :** Fournis un commentaire sur la clarté et la pertinence du texte, ainsi que des encouragements pour l'étudiant.
 
     Assure-toi que ta réponse est bien structurée, concise, bienveillante, et entièrement formatée en Markdown.
+    Ne commence pas la réponse avec des phrases telles que "Réponse attendue", "Note" ou tout autre commentaire introductif. Commence directement avec **Vocabulaire**, **Grammaire**, et **Appréciation générale**.
+
 
     Texte soumis : {text}
 
