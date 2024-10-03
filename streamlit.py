@@ -86,7 +86,7 @@ if st.button('Valider', type="primary"):
             st.write(correct_text(text_input, token))
 
         # Classifier and recomendation
-        green_header('Recomendation')
+        green_header('Recommandation')
 
         # predict the level of the input text
         res = classifier(text_input)[0]['label']
@@ -98,7 +98,7 @@ if st.button('Valider', type="primary"):
             st.session_state.text = random.choice(intermediate)
         else:
             st.session_state.text = random.choice(beginner)
-        st.write("Voici une nouvelle activité spécialement choisie pour vous, afin de corriger vos erreurs et perfectionner votre français.")
+        st.write("Nous avons choisi une nouvelle activité pour vous.  Cliquez ici pour continuer !")
         if st.button("Commencer l'exercice suivant", type="primary"):
             st.session_state.count += 1
             st.session_state.user_input = ""
