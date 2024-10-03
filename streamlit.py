@@ -115,7 +115,7 @@ st.session_state.user_input = text_input
 # """, unsafe_allow_html=True)
 
 st.html(f"""
-    <div style='margin-top: 40px;'>       
+    <div style='margin-top: 20px;'>       
         <img src="data:image/png+xml;base64,{get_image(logo_pleias)}">
     </div>
 """)
