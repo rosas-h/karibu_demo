@@ -17,14 +17,21 @@ advanced = df[df['level'] == 'advanced']['question'].tolist()
 classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
 
 # initialize the session state
-if 'count' not in st.session_state:
-    st.session_state.count = 0
 
 if 'text' not in st.session_state:
     st.session_state.text = random.choice(beginner)
 
 if 'user_input' not in st.session_state:
     st.session_state.user_input = ""
+
+if 'user_text' not in st.session_state:
+    st.session_state.user_text = ""
+
+if isinstance(st.session_state.user_input, str):
+    st.title(f'{st.session_state.user_input}')
+
+
+
 
 
 # put image and buttin in the center
@@ -53,10 +60,7 @@ def get_image(icon_path):
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
     return data_url
-# file_ = open(icon_path, "rb")
-# contents = file_.read()
-# data_url = base64.b64encode(contents).decode("utf-8")
-# file_.close()
+
 
 st.html(f"""
     <div style="background: linear-gradient(90deg, #E23337, #E41AAC); padding: 6px; border-radius: 8px; display: flex; align-items: left;">
@@ -71,25 +75,40 @@ st.write("\n")
 st.write("À vous de jouer ! " + st.session_state.text)
 
 # Input field
-text_input = st.text_area("Ecrivez un texte d'au moins 30 mots", label_visibility="collapsed", height=200, placeholder="Ecrivez un texte d'au moins 30 mots", value=st.session_state.user_input)
+label = "Écrivez un texte d'au moins 30 mots"
+if st.session_state.user_input:
+    label = st.session_state.user_input
+
+st.text_area(
+    label, 
+    key="user_text",
+    label_visibility="collapsed", 
+    placeholder="Écrivez un texte d'au moins 30 mot", 
+    height=200
+    )
+
 
 # Button
 if st.button('Valider', type="primary"):
-    if len(text_input) < 30:
-        st.warning("Le texte doit contenir au moins 30 mots.")
+# if st.session_state.user_text:
+    if len(st.session_state.user_text.split()) < 30:
+        st.warning(f"Le texte doit contenir au moins 30 mots. TEXTE: {st.session_state.user_text}")
     else:
         # st.subheader('**:green[Correction]**')
         green_header('Correction')
         
         with st.spinner('Correction en cours, veuillez patienter...'):
         # get correction from the model
-            st.write(correct_text(text_input, token))
+            correction = correct_text(st.session_state.user_text, token)
+            print(correction)
+            st.write(correction)
 
         # Classifier and recomendation
-        green_header('Recomendation')
+        green_header('Recommandation')
 
         # predict the level of the input text
-        res = classifier(text_input)[0]['label']
+        res = classifier(st.session_state.user_text)[0]['label']
+        print("level:", res)
 
         # get random question based on the level
         if res == 'advanced':
@@ -98,24 +117,16 @@ if st.button('Valider', type="primary"):
             st.session_state.text = random.choice(intermediate)
         else:
             st.session_state.text = random.choice(beginner)
-        st.write("Voici une nouvelle activité spécialement choisie pour vous, afin de corriger vos erreurs et perfectionner votre français.")
+        st.write("Nous avons choisi une nouvelle activité pour vous.  Cliquez ici pour continuer !")
         if st.button("Commencer l'exercice suivant", type="primary"):
-            st.session_state.count += 1
-            st.session_state.user_input = ""
-            st.experimental_rerun()
-st.session_state.user_input = text_input
 
-# st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-# st.image(logo_pleias, width=150)
+            st.rerun()
 
-# st.markdown("""
-#     <div style='margin-top: 40px;'>
-#         <img src='image.png' style='width: 150px; height: auto;'/>
-#     </div>
-# """, unsafe_allow_html=True)
+st.session_state.user_input = st.session_state.user_text
+
 
 st.html(f"""
-    <div style='margin-top: 20px;'>       
+    <div style='margin-top: 10px;'>       
         <img src="data:image/png+xml;base64,{get_image(logo_pleias)}">
     </div>
 """)
