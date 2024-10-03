@@ -27,8 +27,6 @@ if 'user_input' not in st.session_state:
 if 'user_text' not in st.session_state:
     st.session_state.user_text = ""
 
-if isinstance(st.session_state.user_input, str):
-    st.title(f'{st.session_state.user_input}')
 
 
 
