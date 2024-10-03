@@ -119,10 +119,11 @@ if st.button('Valider', type="primary"):
             st.session_state.text = random.choice(beginner)
         st.write("Nous avons choisi une nouvelle activité pour vous.  Cliquez ici pour continuer !")
         if st.button("Commencer l'exercice suivant", type="primary"):
-
+            st.session_state["user_text"] = ""
+            st.session_state.user_input = ""
             st.rerun()
 
-st.session_state.user_input = st.session_state.user_text
+# st.session_state.user_input = st.session_state.user_text
 
 
 st.html(f"""
