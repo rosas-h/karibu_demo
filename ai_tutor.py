@@ -22,7 +22,7 @@ def make_prompt(text):
     Texte soumis : 
 
     \"\"\"
-    {text}
+{text}
     \"\"\"
     """
 
