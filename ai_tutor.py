@@ -2,7 +2,7 @@ from huggingface_hub import InferenceClient
 
 
 def make_prompt(text):
-    return f"""
+    template = """
     Tu es un enseignant expérimenté et bienveillant, spécialisé dans la correction des textes d'étudiants.
     Ta tâche consiste à fournir trois éléments essentiels dans un format Markdown, en gardant la réponse courte, bienveillante, et concise, uniquement comme ceci :
 
@@ -20,13 +20,13 @@ def make_prompt(text):
     Donne moi uniquement la réponse comme output
 
     Texte soumis : 
-
-    \"\"\"
-{text}
-    \"\"\"
+    {text}
     """
+    return template
 
 def correct_text(text, hf_token):
     client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
-    output = client.text_generation(make_prompt(text), max_new_tokens=4000)
+    prompt_template = make_prompt("{text}")
+    full_prompt = prompt_template.format(text=text)
+    output = client.text_generation(full_prompt, max_new_tokens=4000)
     return output
