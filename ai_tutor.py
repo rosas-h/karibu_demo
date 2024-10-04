@@ -28,5 +28,5 @@ def correct_text(text, hf_token):
     client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
     prompt_template = make_prompt("{text}")
     full_prompt = prompt_template.format(text=text)
-    output = client.text_generation(full_prompt, max_new_tokens=4000)
+    output = client.text_generation(full_prompt, max_new_tokens=1000)
     return output
