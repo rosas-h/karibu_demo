@@ -109,9 +109,18 @@ if st.session_state.main_button:
         green_header('Correction')
         
         with st.spinner('Correction en cours, veuillez patienter...'):
-            correction = correct_text(st.session_state.user_text, token)
-            st.text_area("Debug: Raw correction output", correction, height=200)
+            correction, debug_info = correct_text(st.session_state.user_text, token)
+            
+            # Display the correction
             st.write(correction)
+            
+            # Display debug information in an expandable section
+            with st.expander("Debug Information"):
+                for info in debug_info:
+                    st.text(info)
+            
+            # Display raw correction output
+            st.text_area("Raw Correction Output", correction, height=200)
 
         # Classifier and recomendation
         green_header('Recommandation')
@@ -134,7 +143,10 @@ if st.session_state.main_button:
             st.rerun()
 
 # st.session_state.user_input = st.session_state.user_text
-
+if st.button("Run Inference Client Test"):
+    with st.spinner('Testing Inference Client...'):
+        test_output = test_inference_client(token)
+        st.text_area("Test Inference Client Output", test_output, height=200)
 
 st.html(f"""
     <div style='margin-top: 10px;'>       
