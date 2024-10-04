@@ -103,24 +103,17 @@ st.button('Valider', type="primary", key="main_button")
 
 # Button
 if st.session_state.main_button:
+
     if len(st.session_state.user_text.split()) < 30:
         st.warning(f"Le texte doit contenir au moins 30 mots")
     else:
         green_header('Correction')
         
         with st.spinner('Correction en cours, veuillez patienter...'):
-            correction, debug_info = correct_text(st.session_state.user_text, token)
-            
-            # Display the correction
+        # get correction from the model
+            correction = add_quote(correct_text(st.session_state.user_text, token))
+            print(correction)
             st.write(correction)
-            
-            # Display debug information in an expandable section
-            with st.expander("Debug Information"):
-                for info in debug_info:
-                    st.text(info)
-            
-            # Display raw correction output
-            st.text_area("Raw Correction Output", correction, height=200)
 
         # Classifier and recomendation
         green_header('Recommandation')
@@ -143,10 +136,7 @@ if st.session_state.main_button:
             st.rerun()
 
 # st.session_state.user_input = st.session_state.user_text
-if st.button("Run Inference Client Test"):
-    with st.spinner('Testing Inference Client...'):
-        test_output = test_inference_client(token)
-        st.text_area("Test Inference Client Output", test_output, height=200)
+
 
 st.html(f"""
     <div style='margin-top: 10px;'>       
