@@ -26,21 +26,23 @@ def make_prompt(text):
     return template
 
 def correct_text(text, hf_token):
-    print("Debug: Input text:", repr(text))
+    debug_info = []
+    debug_info.append(f"Debug: Input text: {repr(text)}")
     
     client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
     
     prompt_template = make_prompt("{text}")
-    print("Debug: Prompt template:", repr(prompt_template))
+    debug_info.append(f"Debug: Prompt template: {repr(prompt_template)}")
     
     full_prompt = prompt_template.format(text=text)
-    print("Debug: Full prompt:", repr(full_prompt))
+    debug_info.append(f"Debug: Full prompt: {repr(full_prompt)}")
     
     try:
         output = client.text_generation(full_prompt, max_new_tokens=4000)
-        print("Debug: Raw output:", repr(output))
+        debug_info.append(f"Debug: Raw output: {repr(output)}")
     except Exception as e:
-        print("Debug: Exception occurred:", str(e))
-        return f"An error occurred: {str(e)}"
+        error_msg = f"An error occurred: {str(e)}"
+        debug_info.append(f"Debug: Exception occurred: {error_msg}")
+        return error_msg, debug_info
     
-    return output
+    return output, debug_info
