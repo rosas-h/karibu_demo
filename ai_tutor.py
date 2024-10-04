@@ -3,7 +3,7 @@ from huggingface_hub import InferenceClient
 
 def make_prompt(text):
     return f"""
-    Tu es un enseignant expérimenté et bienveillant, spécialisé dans la correction des courts textes d'étudiants.
+    Tu es un enseignant expérimenté et bienveillant, spécialisé dans la correction des textes d'étudiants.
     Ta tâche consiste à fournir trois éléments essentiels dans un format Markdown, en gardant la réponse courte, bienveillante, et concise, uniquement comme ceci :
 
     1. **Vocabulaire :** Donne une analyse du vocabulaire utilisé, en mentionnant les points forts et les suggestions d'amélioration.
@@ -16,8 +16,8 @@ def make_prompt(text):
     3. **Appréciation générale :** Fournis un commentaire sur la clarté et la pertinence du texte, ainsi que des encouragements pour l'étudiant.
 
     Assure-toi que ta réponse est bien structurée, concise, bienveillante, et entièrement formatée en Markdown.
-    Ne commence pas la réponse avec des phrases telles que "Réponse attendue", "Réponse" ou tout autre commentaire introductif. Commence directement avec **Vocabulaire**, **Grammaire**, et **Appréciation générale**.
-    Assure toi de ne commence pas la réponse avec des phrases telles que "Réponse attendue", "Réponse" ou tout autre commentaire introductif.
+    Commence directement avec **Vocabulaire**, **Grammaire**, et **Appréciation générale**.
+    Donne moi uniquement la réponse comme output
 
     Texte soumis : {text}
 
