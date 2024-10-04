@@ -7,14 +7,22 @@ from ai_tutor import correct_text
 
 token = st.secrets["hf_token"]
 
+@st.cache_data
+def get_data():
+    return pd.read_csv('content/question_demo_bsf.csv')
+
 # read csv and get questions by level
-df = pd.read_csv('content/question_demo_bsf.csv')
+df = get_data()
 beginner = df[df['level'] == 'beginner']['question'].tolist()
 intermediate = df[df['level'] == 'intermediate']['question'].tolist()
 advanced = df[df['level'] == 'advanced']['question'].tolist()
 
+@st.cache_resource
+def get_model():
+    return pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
+
 # model to predict the level of the input text
-classifier = pipeline("sentiment-analysis", model="aapoliakova/cls_level_bsf")
+classifier = get_model()
 
 # initialize the session state
 if 'count' not in st.session_state:
@@ -47,6 +55,7 @@ def green_header(text):
 st.image(logo_path)
 
 # block with icon and exercice type
+@st.cache_data
 def get_image(icon_path):
     file_ = open(icon_path, "rb")
     contents = file_.read()

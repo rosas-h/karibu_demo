@@ -8,7 +8,7 @@ def make_prompt(text):
 
     1. **Vocabulaire :** Donne une analyse du vocabulaire utilisé, en mentionnant les points forts et les suggestions d'amélioration.
 
-    2. **Grammaire :** Corrige uniquement les erreurs grammaticales significatives. Ne fais pas de corrections pour des choix stylistiques ou des erreurs de ponctuation. Utilise le format suivant :
+    2. **Grammaire :** Corrige toutes les erreurs de francais. Utilise le format suivant :
     - "mot incorrect" → "mot correct" (explication rapide de l'erreur).
     Si le texte ne contient aucune erreur, indique que le texte est correct avec le format suivant :
     **Grammaire :** Le texte est correct. Félicitations pour le bon travail.
