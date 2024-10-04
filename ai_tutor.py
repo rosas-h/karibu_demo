@@ -1,4 +1,5 @@
 from huggingface_hub import InferenceClient
+import json
 
 
 def make_prompt(text):
@@ -25,8 +26,21 @@ def make_prompt(text):
     return template
 
 def correct_text(text, hf_token):
+    print("Debug: Input text:", repr(text))
+    
     client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
+    
     prompt_template = make_prompt("{text}")
+    print("Debug: Prompt template:", repr(prompt_template))
+    
     full_prompt = prompt_template.format(text=text)
-    output = client.text_generation(full_prompt, max_new_tokens=1000)
+    print("Debug: Full prompt:", repr(full_prompt))
+    
+    try:
+        output = client.text_generation(full_prompt, max_new_tokens=4000)
+        print("Debug: Raw output:", repr(output))
+    except Exception as e:
+        print("Debug: Exception occurred:", str(e))
+        return f"An error occurred: {str(e)}"
+    
     return output
