@@ -46,3 +46,12 @@ def correct_text(text, hf_token):
         return error_msg, debug_info
     
     return output, debug_info
+
+def test_inference_client(hf_token):
+    client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
+    test_prompt = "Translate the following to English: Bonjour, comment allez-vous?"
+    try:
+        output = client.text_generation(test_prompt, max_new_tokens=100)
+        return f"Test output: {output}"
+    except Exception as e:
+        return f"Test exception: {str(e)}"
