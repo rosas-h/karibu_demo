@@ -76,6 +76,12 @@ st.html(f"""
     </div>
 """)
 
+# add """
+def add_quote(text):
+    return f""" 
+    {text} 
+     """
+
 
 # Exercice description
 st.write("\n")
@@ -105,7 +111,7 @@ if st.session_state.main_button:
         
         with st.spinner('Correction en cours, veuillez patienter...'):
         # get correction from the model
-            correction = correct_text(st.session_state.user_text, token).replace("\n\n", "\n")
+            correction = add_quote(correct_text(st.session_state.user_text, token))
             print(correction)
             st.write(correction)
 
