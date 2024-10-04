@@ -19,9 +19,12 @@ def make_prompt(text):
     Commence directement avec **Vocabulaire**, **Grammaire**, et **Appréciation générale**.
     Donne moi uniquement la réponse comme output
 
-    Texte soumis : {text}
+    Texte soumis : 
 
-"""
+    \"\"\"
+    {text}
+    \"\"\"
+    """
 
 def correct_text(text, hf_token):
     client = InferenceClient(model="meta-llama/Meta-Llama-3-70B-Instruct", token=hf_token)
