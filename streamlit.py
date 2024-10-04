@@ -103,16 +103,14 @@ st.button('Valider', type="primary", key="main_button")
 
 # Button
 if st.session_state.main_button:
-
     if len(st.session_state.user_text.split()) < 30:
         st.warning(f"Le texte doit contenir au moins 30 mots")
     else:
         green_header('Correction')
         
         with st.spinner('Correction en cours, veuillez patienter...'):
-        # get correction from the model
-            correction = add_quote(correct_text(st.session_state.user_text, token))
-            print(correction)
+            correction = correct_text(st.session_state.user_text, token)
+            st.text_area("Debug: Raw correction output", correction, height=200)
             st.write(correction)
 
         # Classifier and recomendation
