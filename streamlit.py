@@ -101,7 +101,7 @@ st.button('Valider', type="primary", key="main_button")
 if st.session_state.main_button:
 # if st.session_state.user_text:
     if len(st.session_state.user_text.split()) < 30:
-        st.warning(f"Le texte doit contenir au moins 30 mots. TEXTE: {st.session_state.user_text}")
+        st.warning(f"Le texte doit contenir au moins 30 mots")
     else:
         # st.subheader('**:green[Correction]**')
         green_header('Correction')
